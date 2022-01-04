@@ -1,0 +1,12 @@
+__pycache__
+*.pyc
+env/
+db.sqlite3
+.DS_Store/
+venv/
+.DS_Store
+/dist/
+
+# local env files
+.env.local
+.env.*.local
