@@ -7,10 +7,15 @@ class UsernameSchema(BaseModel):
     username: str
 
 
-class ReturnReposList(BaseModel):
+class ReturnReposListSchema(BaseModel):
     name: str
     stargazers_count: int
 
 
-class ReturnStarsSum(BaseModel):
+class ReturnStarsSumSchema(BaseModel):
     stargazers_count_sum: int
+
+
+class LanguageSizeSchema(BaseModel):
+    language: str
+    size: int

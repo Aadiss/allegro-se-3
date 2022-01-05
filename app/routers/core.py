@@ -25,18 +25,18 @@ def _get_repos_by_username(username: str):
     return response.json()
 
 
-@router.get('/repos', status_code=status.HTTP_200_OK, response_model=List[schemas.ReturnReposList])
+@router.get('/repos', status_code=status.HTTP_200_OK, response_model=List[schemas.ReturnReposListSchema])
 def get_repos(user: schemas.UsernameSchema):
     return _get_repos_by_username(user.username)
 
 
-@router.get('/repos/pagination', status_code=status.HTTP_200_OK, response_model=Page[schemas.ReturnReposList])
+@router.get('/repos/pagination', status_code=status.HTTP_200_OK, response_model=Page[schemas.ReturnReposListSchema])
 def get_pagination_repos(user: schemas.UsernameSchema):
     return paginate(_get_repos_by_username(user.username))
 
 
-@router.get('/repos/sum', status_code=status.HTTP_200_OK, response_model=schemas.ReturnStarsSum)
+@router.get('/repos/sum', status_code=status.HTTP_200_OK, response_model=schemas.ReturnStarsSumSchema)
 def get_stars_sum(user: schemas.UsernameSchema):
-    listed_repos = [schemas.ReturnReposList(**repo) for repo in _get_repos_by_username(user.username)]
+    listed_repos = [schemas.ReturnReposListSchema(**repo) for repo in _get_repos_by_username(user.username)]
 
     return {"stargazers_count_sum": sum([repo.stargazers_count for repo in listed_repos])}
