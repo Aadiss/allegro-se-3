@@ -1,5 +1,6 @@
 from typing import List
 from pydantic import BaseModel
+from fastapi_pagination import Page
 
 
 class UsernameSchema(BaseModel):
