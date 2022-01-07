@@ -1,10 +1,11 @@
-from typing import List
+from typing import Optional
 from pydantic import BaseModel
 from fastapi_pagination import Page
 
 
 class UsernameSchema(BaseModel):
     username: str
+    token: Optional[str] = None
 
 
 class ReturnReposListSchema(BaseModel):
@@ -19,3 +20,8 @@ class ReturnStarsSumSchema(BaseModel):
 class LanguageSizeSchema(BaseModel):
     language: str
     size: int
+
+
+class ReposNameSchema(BaseModel):
+    name: str
+
