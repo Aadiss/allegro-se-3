@@ -21,7 +21,10 @@ def _get_repos_by_username(username: str, token: Optional[str] = None):
 
     try:
         while condition:
-            response = requests.get(f'https://api.github.com/users/{username}/repos?per_page=100&page={page}', headers={'Authorization': f"Bearer {token}"})
+            if token:
+                response = requests.get(f'https://api.github.com/users/{username}/repos?per_page=100&page={page}', headers={'Authorization': f"Bearer {token}"})
+            else:    
+                response = requests.get(f'https://api.github.com/users/{username}/repos?per_page=100&page={page}')
             if len(response.json()) < 100:
                 condition = False
             res_list += response.json()
@@ -37,7 +40,10 @@ def _get_repos_by_username(username: str, token: Optional[str] = None):
 
 def _get_repo_languages(username: str, repo_name:str, token: Optional[str] = None):
     try:
-        response = requests.get(f'https://api.github.com/repos/{username}/{repo_name}/languages', headers={'Authorization': f"Bearer {token}"})
+        if token:
+            response = requests.get(f'https://api.github.com/repos/{username}/{repo_name}/languages', headers={'Authorization': f"Bearer {token}"})
+        else:
+            response = requests.get(f'https://api.github.com/repos/{username}/{repo_name}/languages')
     except requests.exceptions.RequestException as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
@@ -66,6 +72,9 @@ def get_stars_sum(user: schemas.UsernameSchema):
 
 @router.get('/repos/top-languages', status_code=status.HTTP_200_OK, response_model=List[schemas.LanguageSizeSchema])
 def get_top_languages(user: schemas.UsernameSchema, top: int = None):
+    if top:
+        if top < 1:
+            raise HTTPException(detail='top param has to be greater or equal to 1', status_code=status.HTTP_400_BAD_REQUEST)
     listed_names = [schemas.ReposNameSchema(**repo) for repo in _get_repos_by_username(user.username, user.token)]
     listed_languages = [_get_repo_languages(user.username, repo.name, user.token) for repo in listed_names]
 
@@ -76,6 +85,6 @@ def get_top_languages(user: schemas.UsernameSchema, top: int = None):
     df = df.sort_values(by=['size'], ascending=False)
     
     if top:
-        return df.head(top).to_dict('r')
+        return df.head(top).to_dict('records')
     
-    return df.to_dict('r')
+    return df.to_dict('records')
