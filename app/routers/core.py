@@ -53,30 +53,30 @@ def _get_repo_languages(username: str, repo_name:str, token: Optional[str] = Non
     return response.json()
 
 
-@router.get('/repos', status_code=status.HTTP_200_OK, response_model=List[schemas.ReturnReposListSchema])
-def get_repos(user: schemas.UsernameSchema):
-    return _get_repos_by_username(user.username, user.token)
+@router.get('/repos/{username}', status_code=status.HTTP_200_OK, response_model=List[schemas.ReturnReposListSchema])
+def get_repos(username: str, token: Optional[str] = None):
+    return _get_repos_by_username(username, token)
 
 
-@router.get('/repos/pagination', status_code=status.HTTP_200_OK, response_model=Page[schemas.ReturnReposListSchema])
-def get_pagination_repos(user: schemas.UsernameSchema):
-    return paginate(_get_repos_by_username(user.username, user.token))
+@router.get('/repos/{username}/pagination', status_code=status.HTTP_200_OK, response_model=Page[schemas.ReturnReposListSchema])
+def get_pagination_repos(username: str, token: Optional[str] = None):
+    return paginate(_get_repos_by_username(username, token))
 
 
-@router.get('/repos/sum', status_code=status.HTTP_200_OK, response_model=schemas.ReturnStarsSumSchema)
-def get_stars_sum(user: schemas.UsernameSchema):
-    listed_repos = [schemas.ReturnReposListSchema(**repo) for repo in _get_repos_by_username(user.username, user.token)]
+@router.get('/repos/{username}/sum', status_code=status.HTTP_200_OK, response_model=schemas.ReturnStarsSumSchema)
+def get_stars_sum(username: str, token: Optional[str] = None):
+    listed_repos = [schemas.ReturnReposListSchema(**repo) for repo in _get_repos_by_username(username, token)]
 
     return {"stargazers_count_sum": sum([repo.stargazers_count for repo in listed_repos])}
 
 
-@router.get('/repos/top-languages', status_code=status.HTTP_200_OK, response_model=List[schemas.LanguageSizeSchema])
-def get_top_languages(user: schemas.UsernameSchema, top: int = None):
+@router.get('/repos/{username}/top-languages', status_code=status.HTTP_200_OK, response_model=List[schemas.LanguageSizeSchema])
+def get_top_languages(username: str, token: Optional[str] = None, top: int = None):
     if top:
         if top < 1:
             raise HTTPException(detail='top param has to be greater or equal to 1', status_code=status.HTTP_400_BAD_REQUEST)
-    listed_names = [schemas.ReposNameSchema(**repo) for repo in _get_repos_by_username(user.username, user.token)]
-    listed_languages = [_get_repo_languages(user.username, repo.name, user.token) for repo in listed_names]
+    listed_names = [schemas.ReposNameSchema(**repo) for repo in _get_repos_by_username(username, token)]
+    listed_languages = [_get_repo_languages(username, repo.name, token) for repo in listed_names]
 
     df = pd.DataFrame(listed_languages)
     df = df.melt(var_name="language", value_name="size")
