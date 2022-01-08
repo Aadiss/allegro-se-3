@@ -47,20 +47,15 @@ Należy stowrzyć plik .env w folderze z testami, w którym powinien znaleźć s
 
 > ACCESS_TOKEN=your_access_token
 # Dokumentacja
-***UWAGA API GitHuba dopuszcza pewien limit requestów bez uwierzytelniania, żeby spokojnie korzystać z API należy przekazywać acces token w request Body. 
+***UWAGA API GitHuba dopuszcza pewien limit requestów bez uwierzytelniania, żeby spokojnie korzystać z API należy przekazywać acces token jako parametr ścieżki w postaci token=ACCESS_TOKEN. 
 W celu pozyskania tokenu należy mieć konto na GitHub oraz odwiedzić ten [link](https://github.com/settings/tokens).***
 
 ## Listowanie repozytoriów na podstawie nazwy użytkownika
 Zwraca wszystkie publiczne repozytoria danego użytkownika bez stronicowania. Opis stronicowania poniżej.
-### URL: /core/repos
+### URL: /core/repos/{username}
 ### Dozwolone metody: GET
-### Przykładowe request BODY:
-```json
-{
-  "username": "aadiss",
-  "token": "secret_token"
-}
-```
+### Przykładowe URL:
+> /core/repos/allegro
 ### Przykładowy rezultat:
 ```json
 [
@@ -81,16 +76,9 @@ Zwraca wszystkie publiczne repozytoria danego użytkownika bez stronicowania. Op
 ### Stronicowanie 
 Zwraca repozytoria użytkownika wraz z możliwośią wyboru strony oraz maksymalnej ilości repozytoriów na stronie. W przypadku braku parametrów bazowo jest to
 strona 1 o rozmiarze 50.
-### URL: /core/repos/pagination     opcjonalnie: /core/repos/pagination?page=1&size=50
+### URL: /core/repos/{username}/pagination     opcjonalnie: /core/repos/{username}/pagination?page=1&size=50
 ### Dozwolone metody: GET
-### Przykładowe request BODY:
-```json
-{
-  "username": "aadiss",
-  "token": "secret_token"
-}
-```
-### Przykładowy rezultat dla ścieżki: /core/repos/pagination?page=2&size=3
+### Przykładowy rezultat dla ścieżki: /core/repos/tiangolo/pagination?page=2&size=3&token=your_secret_token
 ```json
 {
   "items": [
@@ -121,32 +109,22 @@ strona 1 o rozmiarze 50.
 ```
 ## Sumowanie gwiazdek danego użytkownika
 Zwraca obiekt json, w którym jest zawarta suma gwiazdek wszystkich publicznych repozytoriów danego użytkownika.
-### URL: /core/repos/sum
+### URL: /core/repos/{username}/sum
 ### Dozwolone metody: GET
-### Przykładowe request BODY:
-```json
-{
-  "username": "allegro",
-  "token": "secret_token"
-}
-```
+### Przykładowe URL:
+> /core/repos/allegro/sum?token=your_secret_token
 ### Przykładowy rezultat:
 ```json
 {
-  "stargazers_count_sum": 14467
+  "stargazers_count_sum": 14472
 }
 ```
 ## Ranking najpopularniejszych języków programowania
 Zwraca zadaną liczbę najpopularniejszych języków dla danego użytkownika na podstawie ilości bajtów kodu w nim napisanych. Można zdefiniować parametr top, który mówi ile topowych języków ma być zwróconych.
-### URL: /core/repos/top-languages    opcjonalnie: /core/repos/top-languages?top=3
+### URL: /core/repos/{username}/top-languages    opcjonalnie: /core/repos/{username}/top-languages?top=3
 ### Dozwolone metody: GET
-### Przykładowe request BODY:
-```json
-{
-  "username": "allegro",
-  "token": "secret_token"
-}
-```
+### Przykładowe URL:
+> /core/repos/allegro/top-languages?top=3&token=your_secret_token
 ### Przykładowy rezultat dla URL: /core/repos/top-languages?top=3
 ```json
 [
