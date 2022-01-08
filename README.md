@@ -6,11 +6,10 @@ języków programowania użytych w projektach danego użytkownika. Całość zos
 # Dostęp publiczny
 API dostępne jest na Google Cloud pod adresem:
 
-adres
+(https://allegro-se-3-ljuvv5sxjq-uc.a.run.app/docs)
 
-Oraz na Heroku:
+Do deploymentu użyto usługi Google Cloud Run
 
-adres
 ---
 # Konfiguracja lokalna
 ## Docker
