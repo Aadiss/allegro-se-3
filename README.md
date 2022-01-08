@@ -43,6 +43,10 @@ Po pomyślnym zainstalowaniu zależności można odpalić aplikację przy użyci
 Na uruchomionym środowisku wirtualnym możliwe jest odpalenie testów poleceniem:
 
 > pytest
+
+Należy stowrzyć plik .env w folderze z testami, w którym powinien znaleźć się ACCESS_TOKEN pozwalający na nieograniczone requesty do API GitHuba:
+
+> ACCESS_TOKEN=your_access_token
 # Dokumentacja
 ***UWAGA API GitHuba dopuszcza pewien limit requestów bez uwierzytelniania, żeby spokojnie korzystać z API należy przekazywać acces token w request Body. 
 W celu pozyskania tokenu należy mieć konto na GitHub oraz odwiedzić ten [link](https://github.com/settings/tokens).***
@@ -161,3 +165,6 @@ Zwraca zadaną liczbę najpopularniejszych języków dla danego użytkownika na 
   }
 ]
 ```
+## Uwagi
+### Do zrealizowania stronicowania użyto [FastAPI Pagination](https://github.com/uriyyo/fastapi-pagination)
+### Do grupowania najpopularniejszych języków programowania użyto DataFrame'u z Pandas
